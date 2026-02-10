@@ -1,0 +1,47 @@
+{
+  "name": "ai-girlfriend-bot",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "next dev",
+    "dev:ws": "npx tsx server.ts",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:ws\"",
+    "build": "next build",
+    "start": "next start",
+    "start:ws": "node -r tsx/cjs server.ts",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.986.0",
+    "@aws-sdk/client-polly": "^3.986.0",
+    "@aws-sdk/client-transcribe-streaming": "^3.986.0",
+    "@aws-sdk/lib-dynamodb": "^3.986.0",
+    "@google-cloud/vertexai": "^1.10.0",
+    "@pixiv/three-vrm": "^3.4.5",
+    "@tailwindcss/postcss": "^4.1.18",
+    "dotenv": "^17.2.4",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.182.0",
+    "tsx": "^4.21.0",
+    "uuid": "^13.0.0",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "@types/react": "^19.2.13",
+    "@types/three": "^0.182.0",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.18.1",
+    "autoprefixer": "^10.4.24",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  }
+}
