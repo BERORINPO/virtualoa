@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: virtualoa-ws
+    runtime: node
+    region: singapore
+    plan: free
+    buildCommand: npm ci
+    startCommand: npx tsx server.ts
+    envVars:
+      - key: WS_PORT
+        value: "10000"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGIN
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: ap-northeast-1
