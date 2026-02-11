@@ -7,6 +7,7 @@ interface VRMViewerProps {
   emotion: Emotion;
   isTalking: boolean;
   volume: number;
+  vrmUrl: string;
 }
 
 const EMOTION_COLORS: Record<Emotion, string> = {
@@ -27,7 +28,7 @@ const EMOTION_LABELS: Record<Emotion, string> = {
   angry: "😤 怒り",
 };
 
-export function VRMViewer({ emotion, isTalking, volume }: VRMViewerProps) {
+export function VRMViewer({ emotion, isTalking, volume, vrmUrl }: VRMViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<{
     scene: import("three").Scene;
@@ -38,6 +39,7 @@ export function VRMViewer({ emotion, isTalking, volume }: VRMViewerProps) {
     idleAnimator: import("@/lib/avatar/idle-animation").IdleAnimator | null;
   } | null>(null);
 
+  // Initialize scene once
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -45,17 +47,11 @@ export function VRMViewer({ emotion, isTalking, volume }: VRMViewerProps) {
 
     async function init() {
       const THREE = await import("three");
-      const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
-      const { VRMLoaderPlugin, VRMUtils } = await import("@pixiv/three-vrm");
-      const { IdleAnimator } = await import("@/lib/avatar/idle-animation");
 
       const canvas = canvasRef.current!;
       const scene = new THREE.Scene();
-
-      // Gradient background
       scene.background = new THREE.Color(0x0f0a1e);
 
-      // Camera
       const camera = new THREE.PerspectiveCamera(
         30,
         canvas.clientWidth / canvas.clientHeight,
@@ -65,7 +61,6 @@ export function VRMViewer({ emotion, isTalking, volume }: VRMViewerProps) {
       camera.position.set(0, 1.3, 2.5);
       camera.lookAt(0, 1.2, 0);
 
-      // Renderer
       const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
@@ -76,78 +71,31 @@ export function VRMViewer({ emotion, isTalking, volume }: VRMViewerProps) {
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.2;
 
-      // Lighting
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
       scene.add(ambientLight);
-
       const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
       directionalLight.position.set(1, 2, 3);
       scene.add(directionalLight);
-
       const pinkLight = new THREE.PointLight(0xf472b6, 0.5, 10);
       pinkLight.position.set(-2, 1, 2);
       scene.add(pinkLight);
-
       const purpleLight = new THREE.PointLight(0xc084fc, 0.3, 10);
       purpleLight.position.set(2, 1, -1);
       scene.add(purpleLight);
 
-      // Load VRM
-      const loader = new GLTFLoader();
-      loader.register((parser) => new VRMLoaderPlugin(parser));
-
-      let vrm: import("@pixiv/three-vrm").VRM | null = null;
-      let idleAnimator: import("@/lib/avatar/idle-animation").IdleAnimator | null = null;
-
-      try {
-        const gltf = await loader.loadAsync("/models/girlfriend.vrm");
-        vrm = gltf.userData.vrm;
-        if (vrm) {
-          VRMUtils.removeUnnecessaryVertices(gltf.scene);
-          VRMUtils.removeUnnecessaryJoints(gltf.scene);
-          vrm.scene.rotation.y = Math.PI;
-          scene.add(vrm.scene);
-          idleAnimator = new IdleAnimator(vrm);
-        }
-      } catch {
-        // VRM not found - show placeholder
-        const geometry = new THREE.CapsuleGeometry(0.3, 0.8, 4, 16);
-        const material = new THREE.MeshStandardMaterial({
-          color: 0xf472b6,
-          emissive: 0x831843,
-          emissiveIntensity: 0.2,
-        });
-        const placeholder = new THREE.Mesh(geometry, material);
-        placeholder.position.set(0, 1.2, 0);
-        scene.add(placeholder);
-
-        // Head
-        const headGeom = new THREE.SphereGeometry(0.25, 16, 16);
-        const head = new THREE.Mesh(headGeom, material);
-        head.position.set(0, 1.9, 0);
-        scene.add(head);
-      }
-
       const clock = new THREE.Clock();
-      rendererRef.current = { scene, camera, renderer, vrm, clock, idleAnimator };
+      rendererRef.current = { scene, camera, renderer, vrm: null, clock, idleAnimator: null };
 
-      // Animation loop
       function animate() {
         animationId = requestAnimationFrame(animate);
         const delta = clock.getDelta();
-
-        if (idleAnimator) {
-          idleAnimator.update(delta);
-        }
-        if (vrm) {
-          vrm.update(delta);
-        }
-
+        const ref = rendererRef.current;
+        if (ref?.idleAnimator) ref.idleAnimator.update(delta);
+        if (ref?.vrm) ref.vrm.update(delta);
         renderer.render(scene, camera);
       }
       animate();
 
-      // Handle resize
       const handleResize = () => {
         const width = canvas.clientWidth;
         const height = canvas.clientHeight;
@@ -172,6 +120,67 @@ export function VRMViewer({ emotion, isTalking, volume }: VRMViewerProps) {
       }
     };
   }, []);
+
+  // Load VRM when vrmUrl changes
+  useEffect(() => {
+    if (!vrmUrl) return;
+
+    let cancelled = false;
+
+    async function loadVRM() {
+      // Wait for scene to be ready
+      const waitForScene = () =>
+        new Promise<void>((resolve) => {
+          const check = () => {
+            if (rendererRef.current) resolve();
+            else setTimeout(check, 50);
+          };
+          check();
+        });
+      await waitForScene();
+      if (cancelled) return;
+
+      const ref = rendererRef.current!;
+      const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+      const { VRMLoaderPlugin, VRMUtils } = await import("@pixiv/three-vrm");
+      const { IdleAnimator } = await import("@/lib/avatar/idle-animation");
+
+      // Remove old VRM
+      if (ref.idleAnimator) {
+        ref.idleAnimator.dispose();
+        ref.idleAnimator = null;
+      }
+      if (ref.vrm) {
+        ref.scene.remove(ref.vrm.scene);
+        ref.vrm = null;
+      }
+
+      try {
+        const loader = new GLTFLoader();
+        loader.register((parser) => new VRMLoaderPlugin(parser));
+        const gltf = await loader.loadAsync(vrmUrl);
+        if (cancelled) return;
+
+        const vrm = gltf.userData.vrm;
+        if (vrm) {
+          VRMUtils.removeUnnecessaryVertices(gltf.scene);
+          VRMUtils.removeUnnecessaryJoints(gltf.scene);
+          vrm.scene.rotation.y = Math.PI;
+          ref.scene.add(vrm.scene);
+          ref.vrm = vrm;
+          ref.idleAnimator = new IdleAnimator(vrm);
+        }
+      } catch (e) {
+        console.error("Failed to load VRM:", e);
+      }
+    }
+
+    loadVRM();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [vrmUrl]);
 
   // Update expression based on emotion
   useEffect(() => {
