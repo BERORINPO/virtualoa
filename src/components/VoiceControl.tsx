@@ -26,7 +26,7 @@ export function VoiceControl({
       <button
         onClick={onToggleListening}
         disabled={isSpeaking}
-        className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+        className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all ${
           isListening
             ? "bg-red-500 hover:bg-red-600 scale-110"
             : "bg-pink-500 hover:bg-pink-600"

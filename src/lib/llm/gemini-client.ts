@@ -30,8 +30,11 @@ export async function generateChatResponse(
       },
       contents,
       safetySettings: [
-        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_CIVIC_INTEGRITY", threshold: "BLOCK_NONE" },
       ],
       generationConfig: {
         maxOutputTokens: 256,
@@ -46,8 +49,15 @@ export async function generateChatResponse(
   }
 
   const data = await res.json();
+
+  // Check if response was blocked by safety filters
+  const candidate = data.candidates?.[0];
+  if (candidate?.finishReason === "SAFETY") {
+    return "[emotion: shy] えへへ、ちょっと恥ずかしいな…もう一回言ってくれる？";
+  }
+
   const text =
-    data.candidates?.[0]?.content?.parts?.[0]?.text ||
+    candidate?.content?.parts?.[0]?.text ||
     "[emotion: neutral] ...";
 
   return text;

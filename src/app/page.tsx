@@ -12,6 +12,7 @@ export default function Home() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentEmotion, setCurrentEmotion] = useState<Emotion>("neutral");
   const [volume, setVolume] = useState(0);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const addMessage = useCallback((msg: ChatMessage) => {
     setMessages((prev) => [...prev, msg]);
@@ -75,9 +76,9 @@ export default function Home() {
   );
 
   return (
-    <main className="relative h-screen w-screen flex">
+    <main className="relative h-[100dvh] w-screen flex flex-col lg:flex-row overflow-hidden">
       {/* 3D Avatar Area */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative min-h-0">
         <VRMViewer
           emotion={currentEmotion}
           isTalking={isSpeaking}
@@ -85,18 +86,55 @@ export default function Home() {
         />
 
         {/* Voice Control - bottom center of avatar area */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-3 z-10">
           <VoiceControl
             isListening={isListening}
             isSpeaking={isSpeaking}
             onToggleListening={toggleListening}
           />
         </div>
+
+        {/* Mobile: Chat toggle button */}
+        <button
+          onClick={() => setChatOpen(!chatOpen)}
+          className="lg:hidden absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-sm rounded-full p-2.5 text-white/80 hover:text-white hover:bg-white/20 transition-all"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            {chatOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            )}
+          </svg>
+          {messages.length > 0 && !chatOpen && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-pink-500 rounded-full text-[10px] flex items-center justify-center">
+              {messages.length}
+            </span>
+          )}
+        </button>
       </div>
 
-      {/* Chat Panel - right side */}
-      <div className="w-96 h-full border-l border-white/10">
-        <ChatPanel messages={messages} onSendMessage={handleSendMessage} />
+      {/* Chat Panel - mobile: overlay, desktop: side panel */}
+      <div
+        className={`
+          lg:relative lg:w-96 lg:h-full lg:border-l lg:border-white/10 lg:translate-x-0 lg:block
+          fixed inset-0 z-30 transition-transform duration-300 ease-in-out
+          ${chatOpen ? "translate-x-0" : "translate-x-full"}
+          lg:!translate-x-0 lg:!static lg:!inset-auto
+        `}
+      >
+        {/* Mobile: semi-transparent backdrop */}
+        <div
+          className="lg:hidden absolute inset-0 bg-black/50"
+          onClick={() => setChatOpen(false)}
+        />
+        <div className="relative h-full ml-auto w-full sm:w-96 lg:w-full">
+          <ChatPanel
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            onClose={() => setChatOpen(false)}
+          />
+        </div>
       </div>
     </main>
   );
