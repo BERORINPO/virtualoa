@@ -151,9 +151,7 @@ async function startGeminiLiveListening(state: ClientState) {
   state.isStreaming = true;
 
   const apiKey = process.env.GEMINI_API_KEY || "";
-  if (!apiKey) {
-    // Fallback: use Gemini text API + Polly TTS (same as AWS mode but without Transcribe)
-    console.log("No GEMINI_API_KEY set, falling back to text pipeline with Web Speech API hint");
+  if (!apiKey || apiKey === "your-gemini-api-key") {
     sendMessage(state.ws, {
       type: "error",
       data: "Gemini Live APIキーが未設定です。AWSモードを使用してください。\n(.env.local に GEMINI_API_KEY を設定)",
@@ -164,7 +162,10 @@ async function startGeminiLiveListening(state: ClientState) {
 
   try {
     const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key=${apiKey}`;
-    const geminiWs = new WsModule(wsUrl);
+    const wsOptions = process.env.ALLOWED_ORIGIN
+      ? { headers: { Origin: process.env.ALLOWED_ORIGIN } }
+      : undefined;
+    const geminiWs = new WsModule(wsUrl, wsOptions);
     state.geminiWs = geminiWs;
 
     await new Promise<void>((resolve, reject) => {
