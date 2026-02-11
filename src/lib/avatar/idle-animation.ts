@@ -86,268 +86,142 @@ interface GestureDefinition {
 
 const GESTURES: GestureDefinition[] = [
   {
-    // Wave hand (right hand)
-    name: "wave",
-    duration: 2.0,
+    // Small nod
+    name: "nod",
+    duration: 1.8,
     keyframes: [
       { time: 0.0, pose: {} },
-      {
-        time: 0.2,
-        pose: {
-          rightUpperArm: quatMul(quatZ(-20), quatX(-30)),
-          rightLowerArm: quatMul(quatZ(-70), quatX(-20)),
-          rightHand: quatZ(10),
-        },
-      },
-      {
-        time: 0.4,
-        pose: {
-          rightUpperArm: quatMul(quatZ(-20), quatX(-30)),
-          rightLowerArm: quatMul(quatZ(-70), quatX(-20)),
-          rightHand: quatZ(-20),
-          head: quatMul(quatZ(5), quatX(3)),
-        },
-      },
-      {
-        time: 0.6,
-        pose: {
-          rightUpperArm: quatMul(quatZ(-20), quatX(-30)),
-          rightLowerArm: quatMul(quatZ(-70), quatX(-20)),
-          rightHand: quatZ(15),
-          head: quatMul(quatZ(-3), quatX(2)),
-        },
-      },
-      {
-        time: 0.8,
-        pose: {
-          rightUpperArm: quatMul(quatZ(-20), quatX(-30)),
-          rightLowerArm: quatMul(quatZ(-70), quatX(-20)),
-          rightHand: quatZ(-15),
-        },
-      },
+      { time: 0.25, pose: { head: quatX(8), neck: quatX(3) } },
+      { time: 0.45, pose: { head: quatX(-1), neck: quatX(0) } },
+      { time: 0.6, pose: { head: quatX(6), neck: quatX(2) } },
+      { time: 0.8, pose: { head: quatX(0), neck: quatX(0) } },
       { time: 1.0, pose: {} },
     ],
   },
   {
-    // Big nod
-    name: "nod",
-    duration: 1.4,
+    // Gentle head tilt
+    name: "headTilt",
+    duration: 2.5,
     keyframes: [
       { time: 0.0, pose: {} },
-      {
-        time: 0.2,
-        pose: { head: quatX(15), neck: quatX(5) },
-      },
       {
         time: 0.35,
-        pose: { head: quatX(-3), neck: quatX(-2) },
-      },
-      {
-        time: 0.5,
-        pose: { head: quatX(12), neck: quatX(4) },
-      },
-      {
-        time: 0.7,
-        pose: { head: quatX(-2), neck: quatX(-1) },
-      },
-      { time: 1.0, pose: {} },
-    ],
-  },
-  {
-    // Tilt head cutely
-    name: "headTilt",
-    duration: 2.0,
-    keyframes: [
-      { time: 0.0, pose: {} },
-      {
-        time: 0.3,
         pose: {
-          head: quatMul(quatZ(12), quatX(5)),
-          neck: quatZ(5),
-          spine: quatZ(2),
-        },
-      },
-      {
-        time: 0.7,
-        pose: {
-          head: quatMul(quatZ(10), quatX(3)),
-          neck: quatZ(4),
-          spine: quatZ(1),
-        },
-      },
-      { time: 1.0, pose: {} },
-    ],
-  },
-  {
-    // Touch chin (thinking)
-    name: "thinking",
-    duration: 3.0,
-    keyframes: [
-      { time: 0.0, pose: {} },
-      {
-        time: 0.2,
-        pose: {
-          rightUpperArm: quatMul(quatZ(-40), quatX(-40)),
-          rightLowerArm: quatMul(quatZ(-90), quatX(-30)),
-          rightHand: quatX(-20),
-          head: quatMul(quatZ(5), quatX(8)),
-          neck: quatZ(3),
-        },
-      },
-      {
-        time: 0.5,
-        pose: {
-          rightUpperArm: quatMul(quatZ(-40), quatX(-40)),
-          rightLowerArm: quatMul(quatZ(-90), quatX(-30)),
-          rightHand: quatX(-20),
-          head: quatMul(quatZ(3), quatX(10)),
+          head: quatMul(quatZ(6), quatX(2)),
           neck: quatZ(2),
         },
       },
       {
-        time: 0.8,
+        time: 0.65,
         pose: {
-          rightUpperArm: quatMul(quatZ(-40), quatX(-40)),
-          rightLowerArm: quatMul(quatZ(-90), quatX(-30)),
-          rightHand: quatX(-15),
-          head: quatMul(quatZ(6), quatX(6)),
-          neck: quatZ(4),
+          head: quatMul(quatZ(5), quatX(1)),
+          neck: quatZ(2),
         },
       },
       { time: 1.0, pose: {} },
     ],
   },
   {
-    // Both hands clasp (excited)
-    name: "excited",
-    duration: 1.8,
-    keyframes: [
-      { time: 0.0, pose: {} },
-      {
-        time: 0.15,
-        pose: {
-          leftUpperArm: quatMul(quatZ(30), quatX(-35)),
-          rightUpperArm: quatMul(quatZ(-30), quatX(-35)),
-          leftLowerArm: quatMul(quatZ(80), quatX(-10)),
-          rightLowerArm: quatMul(quatZ(-80), quatX(-10)),
-          spine: quatX(5),
-        },
-      },
-      {
-        time: 0.35,
-        pose: {
-          leftUpperArm: quatMul(quatZ(30), quatX(-30)),
-          rightUpperArm: quatMul(quatZ(-30), quatX(-30)),
-          leftLowerArm: quatMul(quatZ(80), quatX(-10)),
-          rightLowerArm: quatMul(quatZ(-80), quatX(-10)),
-          spine: quatX(-2),
-          hips: quatX(-2),
-        },
-      },
-      {
-        time: 0.55,
-        pose: {
-          leftUpperArm: quatMul(quatZ(30), quatX(-35)),
-          rightUpperArm: quatMul(quatZ(-30), quatX(-35)),
-          leftLowerArm: quatMul(quatZ(80), quatX(-10)),
-          rightLowerArm: quatMul(quatZ(-80), quatX(-10)),
-          spine: quatX(5),
-        },
-      },
-      {
-        time: 0.75,
-        pose: {
-          leftUpperArm: quatMul(quatZ(30), quatX(-30)),
-          rightUpperArm: quatMul(quatZ(-30), quatX(-30)),
-          leftLowerArm: quatMul(quatZ(80), quatX(-10)),
-          rightLowerArm: quatMul(quatZ(-80), quatX(-10)),
-          spine: quatX(-2),
-        },
-      },
-      { time: 1.0, pose: {} },
-    ],
-  },
-  {
-    // Stretch arms up
-    name: "stretch",
+    // Touch face lightly (thinking)
+    name: "thinking",
     duration: 3.5,
     keyframes: [
       { time: 0.0, pose: {} },
       {
         time: 0.25,
         pose: {
-          leftUpperArm: quatMul(quatZ(10), quatX(-120)),
-          rightUpperArm: quatMul(quatZ(-10), quatX(-120)),
-          leftLowerArm: quatZ(20),
-          rightLowerArm: quatZ(-20),
-          spine: quatX(-8),
-          head: quatX(-10),
+          rightUpperArm: quatMul(quatZ(-45), quatX(-20)),
+          rightLowerArm: quatMul(quatZ(-50), quatX(-15)),
+          head: quatMul(quatZ(3), quatX(4)),
+          neck: quatZ(2),
         },
       },
       {
-        time: 0.5,
+        time: 0.55,
         pose: {
-          leftUpperArm: quatMul(quatZ(5), quatX(-140)),
-          rightUpperArm: quatMul(quatZ(-5), quatX(-140)),
-          leftLowerArm: quatZ(15),
-          rightLowerArm: quatZ(-15),
-          spine: quatX(-10),
-          head: quatX(-12),
+          rightUpperArm: quatMul(quatZ(-45), quatX(-20)),
+          rightLowerArm: quatMul(quatZ(-50), quatX(-15)),
+          head: quatMul(quatZ(2), quatX(5)),
+          neck: quatZ(1),
         },
       },
       {
-        time: 0.75,
+        time: 0.8,
         pose: {
-          leftUpperArm: quatMul(quatZ(10), quatX(-120)),
-          rightUpperArm: quatMul(quatZ(-10), quatX(-120)),
-          leftLowerArm: quatZ(20),
-          rightLowerArm: quatZ(-20),
-          spine: quatX(-5),
-          head: quatX(-5),
+          rightUpperArm: quatMul(quatZ(-45), quatX(-20)),
+          rightLowerArm: quatMul(quatZ(-50), quatX(-15)),
+          head: quatMul(quatZ(3), quatX(3)),
+          neck: quatZ(2),
         },
       },
       { time: 1.0, pose: {} },
     ],
   },
   {
-    // Shy pose - hands together in front
-    name: "shy",
-    duration: 2.5,
+    // Hands together (happy/excited) - gentle
+    name: "excited",
+    duration: 2.2,
     keyframes: [
       { time: 0.0, pose: {} },
       {
         time: 0.2,
         pose: {
-          leftUpperArm: quatMul(quatZ(45), quatX(-25)),
-          rightUpperArm: quatMul(quatZ(-45), quatX(-25)),
-          leftLowerArm: quatMul(quatZ(60), quatX(-20)),
-          rightLowerArm: quatMul(quatZ(-60), quatX(-20)),
-          head: quatMul(quatX(10), quatZ(8)),
-          spine: quatX(5),
-          hips: quatZ(3),
+          leftUpperArm: quatMul(quatZ(40), quatX(-15)),
+          rightUpperArm: quatMul(quatZ(-40), quatX(-15)),
+          leftLowerArm: quatMul(quatZ(45), quatX(-5)),
+          rightLowerArm: quatMul(quatZ(-45), quatX(-5)),
+          spine: quatX(2),
         },
       },
       {
-        time: 0.5,
+        time: 0.45,
         pose: {
-          leftUpperArm: quatMul(quatZ(45), quatX(-25)),
-          rightUpperArm: quatMul(quatZ(-45), quatX(-25)),
-          leftLowerArm: quatMul(quatZ(60), quatX(-20)),
-          rightLowerArm: quatMul(quatZ(-60), quatX(-20)),
-          head: quatMul(quatX(8), quatZ(-5)),
-          spine: quatX(4),
-          hips: quatZ(-2),
+          leftUpperArm: quatMul(quatZ(40), quatX(-12)),
+          rightUpperArm: quatMul(quatZ(-40), quatX(-12)),
+          leftLowerArm: quatMul(quatZ(45), quatX(-5)),
+          rightLowerArm: quatMul(quatZ(-45), quatX(-5)),
+          spine: quatX(0),
         },
       },
       {
-        time: 0.8,
+        time: 0.65,
         pose: {
-          leftUpperArm: quatMul(quatZ(45), quatX(-25)),
-          rightUpperArm: quatMul(quatZ(-45), quatX(-25)),
-          leftLowerArm: quatMul(quatZ(60), quatX(-20)),
-          rightLowerArm: quatMul(quatZ(-60), quatX(-20)),
-          head: quatMul(quatX(10), quatZ(5)),
-          spine: quatX(5),
+          leftUpperArm: quatMul(quatZ(40), quatX(-15)),
+          rightUpperArm: quatMul(quatZ(-40), quatX(-15)),
+          leftLowerArm: quatMul(quatZ(45), quatX(-5)),
+          rightLowerArm: quatMul(quatZ(-45), quatX(-5)),
+          spine: quatX(2),
+        },
+      },
+      { time: 1.0, pose: {} },
+    ],
+  },
+  {
+    // Shy - slight hands in front, look away
+    name: "shy",
+    duration: 3.0,
+    keyframes: [
+      { time: 0.0, pose: {} },
+      {
+        time: 0.25,
+        pose: {
+          leftUpperArm: quatMul(quatZ(50), quatX(-12)),
+          rightUpperArm: quatMul(quatZ(-50), quatX(-12)),
+          leftLowerArm: quatMul(quatZ(35), quatX(-10)),
+          rightLowerArm: quatMul(quatZ(-35), quatX(-10)),
+          head: quatMul(quatX(5), quatZ(4)),
+          spine: quatX(2),
+        },
+      },
+      {
+        time: 0.55,
+        pose: {
+          leftUpperArm: quatMul(quatZ(50), quatX(-12)),
+          rightUpperArm: quatMul(quatZ(-50), quatX(-12)),
+          leftLowerArm: quatMul(quatZ(35), quatX(-10)),
+          rightLowerArm: quatMul(quatZ(-35), quatX(-10)),
+          head: quatMul(quatX(4), quatZ(-3)),
+          spine: quatX(2),
         },
       },
       { time: 1.0, pose: {} },
@@ -355,14 +229,14 @@ const GESTURES: GestureDefinition[] = [
   },
 ];
 
-// Emotion-specific gesture probabilities
+// Emotion-specific gesture choices
 const EMOTION_GESTURES: Record<string, string[]> = {
-  happy: ["wave", "excited", "nod"],
-  surprised: ["excited", "stretch"],
+  happy: ["excited", "nod"],
+  surprised: ["excited", "nod"],
   shy: ["shy", "headTilt"],
   sad: ["thinking", "headTilt"],
   angry: ["headTilt", "thinking"],
-  neutral: ["wave", "nod", "headTilt", "thinking", "stretch"],
+  neutral: ["nod", "headTilt", "thinking"],
 };
 
 /**
@@ -385,7 +259,7 @@ export class IdleAnimator {
   // Gesture state
   private currentGesture: GestureDefinition | null = null;
   private gestureTime = 0;
-  private gestureTimer = 5 + Math.random() * 8; // time until next gesture
+  private gestureTimer = 8 + Math.random() * 15; // time until next gesture
   private gestureBlend = 0; // 0 = idle only, 1 = gesture fully blended
 
   // Emotion for gesture selection
@@ -448,10 +322,10 @@ export class IdleAnimator {
   private calcIdlePose(): Record<string, Q4> {
     const t = this.elapsed;
 
-    // Arms: ~65 degrees down from T-pose with gentle wobble
+    // Arms: ~65 degrees down from T-pose with very subtle wobble
     const baseArmAngle = 65;
-    const armWobble = Math.sin(t * 0.6 + this.armPhase) * 2;
-    const armForward = Math.sin(t * 0.35) * 3;
+    const armWobble = Math.sin(t * 0.4 + this.armPhase) * 0.8;
+    const armForward = Math.sin(t * 0.25) * 1;
 
     const leftUpperArm = quatMul(
       quatZ(baseArmAngle + armWobble),
@@ -462,33 +336,33 @@ export class IdleAnimator {
       quatX(armForward)
     );
 
-    // Lower arms: bend with gentle movement
-    const lowerArmBend = 15 + Math.sin(t * 0.4) * 3;
+    // Lower arms: slight natural bend
+    const lowerArmBend = 15 + Math.sin(t * 0.3) * 1;
     const leftLowerArm = quatZ(lowerArmBend);
     const rightLowerArm = quatZ(-lowerArmBend);
 
-    // Breathing (spine)
-    const breathAngle = 2 + Math.sin(t * 1.8) * 1.2;
+    // Breathing (spine) - subtle
+    const breathAngle = 1 + Math.sin(t * 1.2) * 0.5;
     const spine = quatX(breathAngle);
 
-    // Body sway (hips) - more pronounced
-    const swayAngle = Math.sin(t * 0.5 + this.swayPhase) * 1.5;
-    const hipForward = Math.sin(t * 0.3) * 0.6;
+    // Body sway (hips) - very gentle
+    const swayAngle = Math.sin(t * 0.35 + this.swayPhase) * 0.5;
+    const hipForward = Math.sin(t * 0.2) * 0.2;
     const hips = quatMul(quatZ(swayAngle), quatX(hipForward));
 
-    // Head movement - more lively
-    const headYaw = Math.sin(t * 0.4 + this.headPhase) * 6;
-    const headTilt = Math.sin(t * 0.3 + this.headPhase + 1) * 4;
-    const headNod = Math.sin(t * 0.5) * 3;
+    // Head movement - natural, small
+    const headYaw = Math.sin(t * 0.25 + this.headPhase) * 2.5;
+    const headTilt = Math.sin(t * 0.2 + this.headPhase + 1) * 1.5;
+    const headNod = Math.sin(t * 0.35) * 1;
     const head = quatMul(quatMul(quatY(headYaw), quatZ(headTilt)), quatX(headNod));
 
-    // Neck
-    const neckYaw = Math.sin(t * 0.4 + this.headPhase) * 2.5;
+    // Neck - follows head gently
+    const neckYaw = Math.sin(t * 0.25 + this.headPhase) * 1;
     const neck = quatY(neckYaw);
 
-    // Hands
-    const leftHand = quatZ(Math.sin(t * 0.7) * 5);
-    const rightHand = quatZ(Math.sin(t * 0.7 + 1) * -5);
+    // Hands - minimal
+    const leftHand = quatZ(Math.sin(t * 0.5) * 2);
+    const rightHand = quatZ(Math.sin(t * 0.5 + 1) * -2);
 
     return {
       hips,
@@ -509,9 +383,9 @@ export class IdleAnimator {
       this.gestureTime += delta;
       const progress = this.gestureTime / this.currentGesture.duration;
 
-      // Blend in/out
-      const blendInTime = 0.15;
-      const blendOutTime = 0.15;
+      // Blend in/out - slow transitions for natural feel
+      const blendInTime = 0.25;
+      const blendOutTime = 0.25;
       if (progress < blendInTime) {
         this.gestureBlend = progress / blendInTime;
       } else if (progress > 1 - blendOutTime) {
@@ -524,7 +398,7 @@ export class IdleAnimator {
       if (progress >= 1) {
         this.currentGesture = null;
         this.gestureBlend = 0;
-        this.gestureTimer = 4 + Math.random() * 10;
+        this.gestureTimer = 8 + Math.random() * 15;
       }
     } else {
       this.gestureTimer -= delta;
