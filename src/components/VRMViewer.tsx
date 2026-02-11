@@ -10,24 +10,6 @@ interface VRMViewerProps {
   vrmUrl: string;
 }
 
-const EMOTION_COLORS: Record<Emotion, string> = {
-  happy: "#f472b6",
-  surprised: "#fbbf24",
-  shy: "#f9a8d4",
-  sad: "#60a5fa",
-  neutral: "#c084fc",
-  angry: "#ef4444",
-};
-
-const EMOTION_LABELS: Record<Emotion, string> = {
-  happy: "😊 嬉しい",
-  surprised: "😲 驚き",
-  shy: "😳 照れ",
-  sad: "😢 悲しい",
-  neutral: "🙂 通常",
-  angry: "😤 怒り",
-};
-
 export function VRMViewer({ emotion, isTalking, volume, vrmUrl }: VRMViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<{
@@ -236,34 +218,6 @@ export function VRMViewer({ emotion, isTalking, volume, vrmUrl }: VRMViewerProps
   return (
     <div className="relative w-full h-full">
       <canvas ref={canvasRef} className="w-full h-full" />
-
-      {/* Emotion indicator */}
-      <div className="absolute top-4 left-4 flex items-center gap-2">
-        <div
-          className="w-3 h-3 rounded-full"
-          style={{ backgroundColor: EMOTION_COLORS[emotion] }}
-        />
-        <span className="text-xs text-white/60">{EMOTION_LABELS[emotion]}</span>
-      </div>
-
-      {/* Talking indicator */}
-      {isTalking && (
-        <div className="absolute top-4 right-4 flex items-center gap-2">
-          <div className="flex gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-1 bg-pink-400 rounded-full animate-pulse"
-                style={{
-                  height: `${8 + Math.random() * 16}px`,
-                  animationDelay: `${i * 0.1}s`,
-                }}
-              />
-            ))}
-          </div>
-          <span className="text-xs text-white/60">Speaking</span>
-        </div>
-      )}
     </div>
   );
 }

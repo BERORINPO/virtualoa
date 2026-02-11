@@ -112,85 +112,88 @@ export default function Home() {
           vrmUrl={avatars[currentAvatarIndex]?.url || "/models/girlfriend.vrm"}
         />
 
-        {/* Voice Control - bottom center of avatar area */}
-        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-3 z-10">
+        {/* Top bar: Avatar selector (left) + Chat toggle (right) */}
+        <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 z-20 flex items-start justify-between">
+          {/* Avatar selector */}
+          <div className="relative">
+            <button
+              onClick={() => setAvatarMenuOpen(!avatarMenuOpen)}
+              className="bg-white/10 backdrop-blur-sm rounded-full p-3 sm:p-3.5 text-white/80 hover:text-white hover:bg-white/20 transition-all"
+              title="アバター切り替え"
+            >
+              <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </button>
+
+            {avatarMenuOpen && (
+              <div className="absolute top-full mt-2 left-0 bg-black/80 backdrop-blur-md rounded-xl border border-white/10 p-2 min-w-[200px] sm:min-w-[220px]">
+                <p className="text-xs sm:text-sm text-white/40 px-2 py-1">アバター選択</p>
+                {avatars.map((avatar, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      setCurrentAvatarIndex(i);
+                      setAvatarMenuOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-2.5 rounded-lg text-sm sm:text-base transition-colors ${
+                      i === currentAvatarIndex
+                        ? "bg-pink-500/30 text-pink-300"
+                        : "text-white/70 hover:bg-white/10"
+                    }`}
+                  >
+                    {avatar.name}
+                  </button>
+                ))}
+                <hr className="border-white/10 my-1" />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full text-left px-3 py-2.5 rounded-lg text-sm sm:text-base text-white/70 hover:bg-white/10 flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  VRMファイルを追加
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".vrm"
+                  onChange={handleVRMUpload}
+                  className="hidden"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Mobile: Chat toggle button */}
+          <button
+            onClick={() => setChatOpen(!chatOpen)}
+            className="lg:hidden relative bg-white/10 backdrop-blur-sm rounded-full p-3 sm:p-3.5 text-white/80 hover:text-white hover:bg-white/20 transition-all"
+          >
+            <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              {chatOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              )}
+            </svg>
+            {messages.length > 0 && !chatOpen && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-pink-500 rounded-full text-[10px] font-bold flex items-center justify-center">
+                {messages.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Voice Control - bottom center */}
+        <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-3 z-10">
           <VoiceControl
             isListening={isListening}
             isSpeaking={isSpeaking}
             onToggleListening={toggleListening}
           />
         </div>
-
-        {/* Avatar selector button - top left */}
-        <div className="absolute top-4 left-4 z-20">
-          <button
-            onClick={() => setAvatarMenuOpen(!avatarMenuOpen)}
-            className="bg-white/10 backdrop-blur-sm rounded-full p-2.5 text-white/80 hover:text-white hover:bg-white/20 transition-all"
-            title="アバター切り替え"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </button>
-
-          {avatarMenuOpen && (
-            <div className="mt-2 bg-black/80 backdrop-blur-md rounded-xl border border-white/10 p-2 min-w-[180px]">
-              <p className="text-xs text-white/40 px-2 py-1">アバター選択</p>
-              {avatars.map((avatar, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setCurrentAvatarIndex(i);
-                    setAvatarMenuOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                    i === currentAvatarIndex
-                      ? "bg-pink-500/30 text-pink-300"
-                      : "text-white/70 hover:bg-white/10"
-                  }`}
-                >
-                  {avatar.name}
-                </button>
-              ))}
-              <hr className="border-white/10 my-1" />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                VRMファイルを追加
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".vrm"
-                onChange={handleVRMUpload}
-                className="hidden"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Mobile: Chat toggle button */}
-        <button
-          onClick={() => setChatOpen(!chatOpen)}
-          className="lg:hidden absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-sm rounded-full p-2.5 text-white/80 hover:text-white hover:bg-white/20 transition-all"
-        >
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            {chatOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            )}
-          </svg>
-          {messages.length > 0 && !chatOpen && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-pink-500 rounded-full text-[10px] flex items-center justify-center">
-              {messages.length}
-            </span>
-          )}
-        </button>
       </div>
 
       {/* Chat Panel - mobile: overlay, desktop: side panel */}

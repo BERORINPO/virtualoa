@@ -14,7 +14,7 @@ export function VoiceControl({
   return (
     <div className="flex flex-col items-center gap-2">
       {/* Status text */}
-      <span className="text-xs text-white/60">
+      <span className="text-sm sm:text-base text-white/60">
         {isSpeaking
           ? "あいが話しています..."
           : isListening
@@ -26,7 +26,7 @@ export function VoiceControl({
       <button
         onClick={onToggleListening}
         disabled={isSpeaking}
-        className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all ${
+        className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center transition-all ${
           isListening
             ? "bg-red-500 hover:bg-red-600 scale-110"
             : "bg-pink-500 hover:bg-pink-600"
@@ -39,7 +39,7 @@ export function VoiceControl({
 
         {/* Mic icon */}
         <svg
-          className="w-7 h-7 text-white relative z-10"
+          className="w-8 h-8 sm:w-9 sm:h-9 text-white relative z-10"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
