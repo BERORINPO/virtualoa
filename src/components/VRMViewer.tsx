@@ -200,6 +200,11 @@ export function VRMViewer({ emotion, isTalking, volume, vrmUrl }: VRMViewerProps
         expressionManager.setValue("relaxed", 0.3);
         break;
     }
+
+    // Notify idle animator of emotion change for gesture reactions
+    if (ref.idleAnimator) {
+      ref.idleAnimator.setEmotion(emotion);
+    }
   }, [emotion]);
 
   // Lip sync based on volume
